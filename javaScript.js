@@ -1,18 +1,25 @@
 const body = document.querySelector('body');
-
+const title = document.getElementById('title');
 const container = document.getElementById('container');
+
 let rows = document.getElementsByClassName("gridRow");
 let cells = document.getElementsByClassName("cell");
+let isDrawing = false;
 
-function defaultGrid(){
+title.addEventListener('click',() => {
     let gridSize = parseInt(prompt("Enter the number of rows and columns for the grid (e.g., 16):", "16"));
     if (gridSize <= 0 || gridSize > 100) {
         alert("Please enter a valid positive number!");
-        return defaultGrid();
+        return;
     }
+    clearGrid();
     makeRows(gridSize);
     makeColumns(gridSize);
-    addHoverEffect();
+    addDrawingEffect();
+});
+
+function clearGrid() {
+    container.innerHTML = "";
 }
 
 function makeRows(rowNum){
@@ -31,14 +38,23 @@ function makeColumns(cellNum){
     }
 }
 
-function addHoverEffect(){
-    for(let i=0; i < cells.length; i++){
-        cells[i].addEventListener('mouseover', function (){
+function addDrawingEffect() {
+    container.addEventListener('mousedown', () => isDrawing = true);
+    container.addEventListener('mouseup', () => isDrawing = false);
+    container.addEventListener('mouseleave', () => isDrawing = false);
+
+
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].addEventListener('mouseover', function () {
+            if (isDrawing) {
+                this.style.backgroundColor = 'black';
+            }
+        });
+
+        cells[i].addEventListener('mousedown', function () {
             this.style.backgroundColor = 'black';
         });
     }
 }
 
-
-defaultGrid();
 
